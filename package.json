@@ -11,6 +11,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.21.1"
+    "axios": "^0.21.1",
+    "pg": "^8.5.1",
+    "stock-exchange-symbols": "^1.0.0",
+    "yahoo-stock-prices": "^1.1.0"
   }
 }
