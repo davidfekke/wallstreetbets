@@ -3,8 +3,6 @@ import PG from 'pg';
 
 const Pool = PG.Pool;
 
-//console.log(Client);
-
 const pool = new Pool({
     user: 'postgres',
     host: 'localhost',
@@ -61,11 +59,6 @@ async function processData() {
     resultArray = await getDataForEpoch(lastEpoch);
     await processData();
 }
-
-const intervalId = setInterval(() => { 
-    console.log(`${new Date()}`);
-    clearInterval(intervalId); 
-}, 1500);
 
 await pool.end();
 
