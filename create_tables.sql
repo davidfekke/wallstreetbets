@@ -6,6 +6,19 @@ CREATE TABLE stock (
     is_etf BOOLEAN NOT NULL
 );
 
+CREATE TABLE mention (
+    stock_id INTEGER,
+    dt TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    message TEXT NOT NULL,
+    source TEXT NOT NULL,
+    url TEXT NOT NULL,
+    PRIMARY KEY (stock_id, dt),
+    CONSTRAINT fk_mention_stock FOREIGN KEY (stock_id) REFERENCES stock (id)
+);
+
+CREATE INDEX ON mention (stock_id, dt DESC);
+SELECT create_hypertable('mention', 'dt');
+
 create TABLE etf_holding (
     etf_id INTEGER NOT NULL,
     holding_id INTEGER NOT NULL,
@@ -19,7 +32,7 @@ create TABLE etf_holding (
 
 CREATE TABLE stock_price (
     stock_id INTEGER NOT NULL,
-    dt TIMESTAMP WITHOUT TIME ONE NOT NULL,
+    dt TIMESTAMP WITHOUT TIME ZONE NOT NULL,
     open NUMERIC NOT NULL,
     high NUMERIC NOT NULL,
     low NUMERIC NOT NULL,
@@ -30,4 +43,5 @@ CREATE TABLE stock_price (
 );
 
 CREATE INDEX ON stock_price (stock_id, dt DESC);
- 
+
+SELECT create_hypertable('stock_price', 'dt');
