@@ -57,10 +57,36 @@ postgres=# create database etfdb;
 \c etfdb;
 ```
 
-You have now created a database called `etfdb`. All of our tables and queries will be ing this database. To create the example tables and create the stock records, run the following nodejs script;
+You have now created a database called `etfdb`. All of our tables and queries will be using this database. 
+
+Add the following tables to your `etfdb` database;
+
+```sql
+CREATE TABLE stock (
+    id SERIAL PRIMARY KEY,
+    symbol TEXT NOT NULL,
+    name TEXT NOT NULL,
+    exchange TEXT NOT NULL,
+    is_etf BOOLEAN NOT NULL
+);
+
+CREATE TABLE mention (
+    stock_id INTEGER,
+    dt TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    message TEXT NOT NULL,
+    source TEXT NOT NULL,
+    url TEXT NOT NULL,
+    PRIMARY KEY (stock_id, dt),
+    CONSTRAINT fk_mention_stock FOREIGN KEY (stock_id) REFERENCES stock (id)
+);
+
+CREATE INDEX ON mention (stock_id, dt DESC);
+```
+
+To create the stock records, run the following nodejs script;
 
 ```bash
-node importstocks.js
+> node importstocks.js
 ```
 
 You now have the working data to run the main index.js example.
