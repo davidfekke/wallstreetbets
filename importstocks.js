@@ -13,8 +13,6 @@ import PG from 'pg';
 
 const Pool = PG.Pool;
 
-//console.log(Client);
-
 const pool = new Pool({
     user: 'postgres',
     host: 'localhost',
@@ -23,16 +21,6 @@ const pool = new Pool({
     port: 5432
 });
   
-
-// const client = new Client({
-//     user: 'postgres',
-//     host: 'localhost',
-//     database: 'etfdb',
-//     password: 'password',
-//     port: 5432,
-// });
-//await client.connect();
-
 try {
     const nysedata = await fsPromises.readFile('NYSE_screener.csv', 'UTF-8');
     const nyseArray = nysedata.split('\r\n'); 

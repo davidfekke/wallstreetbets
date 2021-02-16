@@ -35,7 +35,7 @@ let resultArray = await getData();
 await processData();
 
 async function processData() {
-    resultArray.forEach(element => {
+    for (let element of resultArray) {
         let doesContainDollarWord = false;
         let stockIds = [];
         const words = element.title.split(' ');
@@ -48,19 +48,28 @@ async function processData() {
         }
         if (doesContainDollarWord) {
             console.log(stockIds);
-            console.log(`${element.title}, time: ${convertEpochToDate(element.created_utc)}`);
+            console.log(`${element.title}, time: ${element.created_utc}`);
+            console.log(element.full_link);
+            await insertMention(pool, stockIds, element);
         }
         lastEpoch = element.created_utc;
-        //
-        //element.title.split(' ').forEach(item => console.log(`Word: ${item}`));
-        //console.log('');
-    });
+    }
+
     await new Promise(r => setTimeout(r, 2000));
     resultArray = await getDataForEpoch(lastEpoch);
     await processData();
 }
 
 await pool.end();
+
+async function insertMention(pool, stockIds, element) {
+    //  INSERT INTO mention (stock_id, dt, message, source, url) VALUES (6604, 'epoch'::timestamptz + 1613094762 * '1 second'::interval, 'What are you thoughts on $VNDA', 'WallStreetBets', 'https://reddit/r/wallstreetbets/');
+    const insertQuery = 'INSERT INTO mention (stock_id, dt, message, source, url) VALUES ($1, \'epoch\'::timestamptz + $2 * \'1 second\'::interval, $3, $4, $5);';
+
+    for (let id of stockIds) {
+        await pool.query(insertQuery, [id, element.created_utc, element.title, 'WallStreetBets', element.full_link]);
+    }
+}
 
 function convertEpochToDate(epoch) {
     var d = new Date(0);
