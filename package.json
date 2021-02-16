@@ -13,6 +13,7 @@
   "dependencies": {
     "axios": "^0.21.1",
     "pg": "^8.5.1",
+    "sentiment": "^5.0.2",
     "stock-exchange-symbols": "^1.0.0",
     "yahoo-stock-prices": "^1.1.0"
   }
