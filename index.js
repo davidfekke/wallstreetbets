@@ -18,7 +18,15 @@ for (const row of result.rows) {
     stockMap.set(`$${row.symbol}`, row.id);
 }
 
+// set last epock
+const lastepochquery = 'SELECT extract(epoch from MAX(dt)) as maxdate from mention;';
+const lastresult = await pool.query(lastepochquery);
+
 let lastEpoch = '';
+
+if (lastresult.rows.length === 1) {
+    lastEpoch = lastresult.rows[0].maxdate
+}
 
 const getData = async () => {
     const results = await axios.get('https://api.pushshift.io/reddit/search/submission/?subreddit=wallstreetbets&size=100&after=1d');
@@ -30,7 +38,12 @@ const getDataForEpoch = async (epoch) => {
     return results.data.data;
 }
 
-let resultArray = await getData();
+let resultArray;
+if (lastEpoch !== '') {
+    resultArray = await getDataForEpoch(lastEpoch);
+} else {
+    resultArray = await getData();
+}
 
 await processData();
 
