@@ -29,7 +29,7 @@ if (lastresult.rows.length === 1) {
 }
 
 const getData = async () => {
-    const results = await axios.get('https://api.pushshift.io/reddit/search/submission/?subreddit=wallstreetbets&size=100&after=1d');
+    const results = await axios.get('https://api.pushshift.io/reddit/search/submission/?subreddit=wallstreetbets&size=100&after=3d');
     return results.data.data;
 };
 
@@ -39,11 +39,11 @@ const getDataForEpoch = async (epoch) => {
 }
 
 let resultArray;
-if (lastEpoch !== '') {
-    resultArray = await getDataForEpoch(lastEpoch);
-} else {
+//if (lastEpoch !== '') {
+//    resultArray = await getDataForEpoch(lastEpoch);
+//} else {
     resultArray = await getData();
-}
+//}
 
 await processData();
 
