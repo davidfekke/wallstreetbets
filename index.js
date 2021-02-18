@@ -24,7 +24,9 @@ const lastresult = await pool.query(lastepochquery);
 
 let lastEpoch = '';
 
-if (lastresult.rows.length === 1) {
+if (lastresult.rows.length === 1 && lastresult.rows[0].maxdate) {
+    console.log(lastresult.rows);
+
     lastEpoch = lastresult.rows[0].maxdate
 }
 
@@ -39,11 +41,11 @@ const getDataForEpoch = async (epoch) => {
 }
 
 let resultArray;
-//if (lastEpoch !== '') {
-//    resultArray = await getDataForEpoch(lastEpoch);
-//} else {
+if (lastEpoch !== '') {
+    resultArray = await getDataForEpoch(lastEpoch);
+} else {
     resultArray = await getData();
-//}
+}
 
 await processData();
 
