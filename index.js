@@ -19,7 +19,7 @@ for (const row of result.rows) {
 }
 
 // set last epock
-const lastepochquery = 'SELECT extract(epoch from MAX(dt)) as maxdate from mention;';
+const lastepochquery = 'SELECT ceil(extract(epoch from MAX(dt))) as maxdate from mention;';
 const lastresult = await pool.query(lastepochquery);
 
 let lastEpoch = '';
